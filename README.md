@@ -113,19 +113,3 @@ python3 check_ai_domains.py words.csv --mode netcat --debug
 ```bash
 printf "arwenbelle\n" | python3 check_ai_domains.py /dev/stdin --no-header --mode netcat
 ```
-
-## GitHub Repo Setup
-
-Recommended additions:
-
-- Add `results.csv` and `.whois_checkpoint` to `.gitignore` if you don't want to
-  commit output artifacts.
-- Include a short usage example in your main `README.md` and link to this file.
-
-Suggested `.gitignore` entries:
-
-```
-results*.csv
-.whois_checkpoint
-```
-
