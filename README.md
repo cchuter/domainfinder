@@ -1,4 +1,4 @@
-# Domain Availability Checker (.ai domains)
+# Domain Finder(.ai domains)
 
 This repo includes a small script that checks `.ai` domain availability using a
 CSV list of words and WHOIS queries.
