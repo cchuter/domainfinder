@@ -119,7 +119,6 @@ def query_whois_socket(domain, server, timeout, family):
                 sock.settimeout(timeout)
                 sock.connect(sockaddr)
                 sock.sendall((domain + "\r\n").encode("ascii"))
-                sock.shutdown(socket.SHUT_WR)
                 chunks = []
                 while True:
                     try:

@@ -13,7 +13,7 @@ It outputs a CSV with:
 ## Requirements
 
 - Python 3.8+ (system Python is fine)
-- `nc` (netcat) on your PATH
+- `nc` (netcat) on your PATH, only if using `--mode netcat`
 
 ## Files
 
@@ -24,7 +24,7 @@ It outputs a CSV with:
 ## Quick Start
 
 ```bash
-python3 check_ai_domains.py words.csv --mode netcat > results.csv
+python3 check_ai_domains.py words.csv --mode socket > results.csv
 ```
 
 ## CSV Input
@@ -49,7 +49,7 @@ Write to a file and resume later without losing progress:
 
 ```bash
 python3 check_ai_domains.py words.csv \
-  --mode netcat \
+  --mode socket \
   --output results.csv \
   --checkpoint .whois_checkpoint \
   --resume
@@ -65,7 +65,7 @@ Recommended settings:
 
 ```bash
 python3 check_ai_domains.py words.csv \
-  --mode netcat \
+  --mode socket \
   --sleep 2 \
   --max-sleep 20 \
   --backoff-factor 2 \
@@ -86,7 +86,7 @@ Notes:
 Use `--debug` to print brief diagnostics to stderr:
 
 ```bash
-python3 check_ai_domains.py words.csv --mode netcat --debug
+python3 check_ai_domains.py words.csv --mode socket --debug
 ```
 
 ## Common Issues
@@ -94,7 +94,9 @@ python3 check_ai_domains.py words.csv --mode netcat --debug
 **All rows show `error, empty response`:**
 
 - Ensure port 43 is reachable from your network.
-- Try netcat mode explicitly: `--mode netcat`.
+- Try socket mode explicitly: `--mode socket`.
+- Some `nc` implementations close stdin immediately after sending the query,
+  which can make `whois.nic.ai` return an empty response.
 
 **`nc exit 1` errors mid-run:**
 
@@ -103,13 +105,13 @@ python3 check_ai_domains.py words.csv --mode netcat --debug
 **A known available domain shows as `taken`:**
 
 - Check for typos (e.g., `arwenbelle` vs `aarwenbelle`).
-- Run a single test with netcat to compare:
+- Run a single test with the system whois client to compare:
   ```bash
-  printf "arwenbelle.ai\r\n" | nc -w 5 whois.nic.ai 43
+  whois -h whois.nic.ai arwenbelle.ai
   ```
 
 ## Example: Single Word Check
 
 ```bash
-printf "arwenbelle\n" | python3 check_ai_domains.py /dev/stdin --no-header --mode netcat
+printf "arwenbelle\n" | python3 check_ai_domains.py /dev/stdin --no-header --mode socket
 ```
